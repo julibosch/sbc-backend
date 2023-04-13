@@ -17,7 +17,6 @@ const corsOptions = {
   origin: (origin,callback) => {
     if (dominiosPermitidos.indexOf(origin) !== -1) {
       callback(null,true)
-      console.log("Cors aceptado");
     }else{
       callback(new Error("No permitido por cors"))
     }
