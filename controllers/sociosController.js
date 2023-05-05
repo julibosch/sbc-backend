@@ -73,6 +73,12 @@ const obtenerSocios = async (req, res) => {
 };
 
 //El admin carga el archivo de socios y se actualiza en la base de datos
+let contadorUpdate = 0;
+let contadorCreate = 0;
+let huboError = false; //En caso de que haya un socio duplicado retorna el mensaje de ese socio y no el de que salio todo bien.
+let sociosDuplicados = []; //Contiene los socios que tienen duplicado el Codigo y que se valida por DNI.
+let contador = 0
+
 const cargarArchivo = async (req, res) => {
   const body = req.body;
 
@@ -84,17 +90,33 @@ const cargarArchivo = async (req, res) => {
 
       if (existeSocio) {
         await Socio.updateOne({ dni }, { cuotasAdeudadas });
+        contadorUpdate++
       } else {
+        contadorCreate++
         await Socio.create({ dni, codigo, nombreCompleto, cuotasAdeudadas });
       }
     } catch (error) {
       console.log(`Error: ${error}`);
-      return res.status(500).send('Error al cargar el archivo');
+      sociosDuplicados.push(socio)
+      huboError = true;
+      contador++
+      console.log("catch " + contador)
+      // return res.status(500).send({ msg: error.message });
     }
+    console.log("actualizados: " + contadorUpdate)
+    console.log("creados: " +contadorCreate)
   };
 
+  console.log(sociosDuplicados)
+
   // Devolver respuesta al front
-  res.send({msg: "Los socios se han creado o actualizado con exito!"});
+  if (!huboError) {
+    res.send({msg: "Los socios se han creado o actualizado con exito!"});
+  }
+
+  if (huboError) {
+    res.send({msg:`Se actualizaron o crearon con exito, pero existen dni erroneos`, sociosDuplicados})
+  }
 };
 
 

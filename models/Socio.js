@@ -9,7 +9,6 @@ const socioSchema = mongoose.Schema({
   },
   nombreCompleto: {
     type: String,
-    unique: true,
     required: true,
     trim: true
   },
