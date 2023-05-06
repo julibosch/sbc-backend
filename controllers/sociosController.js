@@ -62,12 +62,9 @@ const obtenerSocios = async (req, res) => {
   const tipoUsuario = 'socio';
 
   try {
-
-    const listaSocios = await Socio.find({ tipoUsuario });
-    res.send(listaSocios)
-
+    const listaSocios = await Socio.find({ tipoUsuario }).sort({nombreCompleto: 'asc'});
+    res.send(listaSocios);
   } catch (error) {
-
     return res.status(401).json({ msg: error.message });
   }
 };
