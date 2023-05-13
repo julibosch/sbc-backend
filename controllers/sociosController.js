@@ -3,7 +3,6 @@ import sanitize from "mongo-sanitize";
 
 const autenticarSocio = async (req, res) => {
   //Valida que no haya una inyeccion noSQL
-  const apellido = sanitize(req.body.apellido);
   const dni = sanitize(req.body.dni);
 
   //Consultar si existe el socio en la base de datos
