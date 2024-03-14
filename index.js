@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 import conectarDB from './config/db.js';
 import socioRoutes from './routes/socioRoutes.js';
 import cors from 'cors';
-import bodyParser from 'body-parser';
+import productoRoutes from "./routes/productoRoutes.js";
+import ventaRoutes from "./routes/ventaRoutes.js"
 
 const app = express();
 app.use(express.json({ limit: '20mb' }));
@@ -13,8 +14,9 @@ dotenv.config();
 
 conectarDB();
 
-//Configuracion para Cors
+// Configuracion para Cors
 const dominiosPermitidos = [process.env.FRONTEND_URL,process.env.estefa_url];
+// const dominiosPermitidos = ["*"];
 const corsOptions = {
   origin: (origin,callback) => {
     if (dominiosPermitidos.indexOf(origin) !== -1) {
@@ -25,9 +27,11 @@ const corsOptions = {
   }
 }
 app.use(cors(corsOptions));
-// app.use(cors({ origin: '*' }));
+
 
 app.use("/", socioRoutes);
+app.use("/", productoRoutes);
+app.use("/", ventaRoutes);
 
 const PORT = process.env.PORT || 4000;
 
