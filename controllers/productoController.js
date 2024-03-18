@@ -18,8 +18,9 @@ const listadoProductos = async (req, res) => {
 const crearProducto = async (req, res) => {
   const { descripcion, precio, categoria } = req.body;
 
+  let precioParseado = isNaN(precio) ? null : Number(precio);
   // Valida los campos del producto
-  const error = validarCamposProductos(descripcion, precio, categoria);
+  const error = validarCamposProductos(descripcion, precioParseado, categoria);
   if (error) {
     return res.status(400).json({ message: error });
   }
