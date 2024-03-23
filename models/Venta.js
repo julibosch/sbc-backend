@@ -5,7 +5,7 @@ const VentaSchema = mongoose.Schema({
   productos: 
   [
     {
-    producto: {
+    productoID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Producto',
       required: true
@@ -27,7 +27,7 @@ const VentaSchema = mongoose.Schema({
   },
   fecha: {
     type: String,
-    default: () => new Date().toLocaleString('en-US', { timeZone: 'America/Buenos_Aires' })
+    default: () => new Date().toLocaleString('es-AR', { timeZone: 'America/Buenos_Aires' })
   }
 });
 
