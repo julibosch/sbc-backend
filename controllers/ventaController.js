@@ -27,7 +27,7 @@ const registrarVenta = async (req, res) => {
   }));
 
   // Validar que se proporcionen los campos requeridos
-  if (!precioTotal || !productosSanitizado.length || !productosSanitizado.every(producto =>
+  if (!precioSanitizado || !productosSanitizado.length || !productosSanitizado.every(producto =>
     producto.productoID && producto.precioUnitario && producto.cantidad
   )) {
     return res.status(400).json({
@@ -37,7 +37,7 @@ const registrarVenta = async (req, res) => {
 
   const nuevaVenta = new Venta({
     productos: productosSanitizado,
-    precioTotal
+    precioTotal: precioSanitizado
   });
 
   try {
