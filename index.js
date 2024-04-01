@@ -15,7 +15,7 @@ dotenv.config();
 conectarDB();
 
 // Configuracion para Cors
-const dominiosPermitidos = [process.env.FRONTEND_URL,process.env.estefa_url];
+const dominiosPermitidos = [process.env.FRONTEND_URL,process.env.URL_VERCEL];
 // const dominiosPermitidos = ["*"];
 const corsOptions = {
   origin: (origin,callback) => {
@@ -27,7 +27,6 @@ const corsOptions = {
   }
 }
 app.use(cors(corsOptions));
-
 
 app.use("/", socioRoutes);
 app.use("/", productoRoutes);
