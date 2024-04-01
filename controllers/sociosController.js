@@ -29,7 +29,7 @@ const mostrarPerfil = async (req, res) => {
       return res.status(401).json({ msg: error.message });
     }
 
-    res.send(socio);
+    return res.send(socio);
   } catch (error) {
     return res.status(401).json({ msg: error });
   }
@@ -48,7 +48,7 @@ const devolverSocio = async (req, res) => {
       return res.status(401).json({ msg: error.message });
     }
 
-    res.send(socio);
+    return res.send(socio);
   } catch (error) {
     const errorCreado = new Error("Socio no registrado");
     return res.status(401).json({ msg: errorCreado.message });
@@ -63,7 +63,7 @@ const obtenerSocios = async (req, res) => {
     const listaSocios = await Socio.find({ tipoUsuario }).sort({
       nombreCompleto: "asc",
     });
-    res.send(listaSocios);
+    return res.send(listaSocios);
   } catch (error) {
     return res.status(401).json({ msg: error.message });
   }
@@ -114,10 +114,10 @@ const cargarArchivo = async (req, res) => {
 
     const respuesta2 = await Socio.insertMany(sociosNuevos);
 
-    res.send({ msg: "Los socios se han creado o actualizado con éxito!" });
+    return res.send({ msg: "Los socios se han creado o actualizado con éxito!" });
   } catch (error) {
     console.log(`Error: ${error}`);
-    res.status(500).send({ msg: error.message });
+    return res.status(500).send({ msg: error.message });
   }
 };
 
