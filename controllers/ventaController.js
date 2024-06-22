@@ -24,16 +24,48 @@ const listadoVentasFinDeSemana = async (req, res) => {
       .json({ message: "Fechas vacias, debe completarlas" });
 
   try {
-    const ventas = await Venta.find({
-      fecha: { $gte: fechaDesde, $lte: fechaHasta },
-    })
-      .sort({ fecha: "asc" })
-      .populate({
-        path: "productos.productoID",
-        select: "descripcion categoria",
-      });
 
-    return res.status(200).json(ventas);
+    const ventasAgrupadas = await Venta.aggregate([
+      {
+        $match: {
+          fecha: { $gte: fechaDesde, $lte: fechaHasta },
+        },
+      },
+      {
+        $unwind: "$productos",
+      },
+      {
+        $group: {
+          _id: "$productos.productoID",
+          totalVentas: { $sum: "$productos.cantidad" },
+        },
+      },
+      {
+        $lookup: {
+          from: "productos",
+          localField: "_id",
+          foreignField: "_id",
+          as: "producto",
+        },
+      },
+      {
+        $unwind: "$producto",
+      },
+      {
+        $project: {
+          _id: 0,
+          productoID: "$_id",
+          descripcion: "$producto.descripcion",
+          categoria: "$producto.categoria",
+          totalVentas: 1,
+        },
+      },
+      {
+        $sort: { totalVentas: -1 },
+      },
+    ]);
+
+    return res.status(200).json(ventasAgrupadas);
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
