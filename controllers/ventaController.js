@@ -5,7 +5,7 @@ const listadoVentas = async (req, res) => {
   try {
     const ventas = await Venta.find({}).sort({ fecha: "asc" }).populate({
       path: "productos.producto",
-      select: "descripcion categoria",
+      select: "descripcion",
     });
 
     return res.status(200).json(ventas);
@@ -77,10 +77,11 @@ const registrarVenta = async (req, res) => {
   const precioSanitizado = sanitize(precioTotal);
 
   // Filtrar los productos para quitar la descripción
-  productosSanitizado = productos.map(({ _id, precioUnitario, cantidad }) => ({
+  productosSanitizado = productos.map(({ _id, precioUnitario, cantidad, categoria }) => ({
     productoID: _id,
     precioUnitario,
     cantidad,
+    categoria
   }));
 
   // Validar que se proporcionen los campos requeridos
@@ -89,7 +90,7 @@ const registrarVenta = async (req, res) => {
     !productosSanitizado.length ||
     !productosSanitizado.every(
       (producto) =>
-        producto.productoID && producto.precioUnitario && producto.cantidad
+        producto.productoID && producto.precioUnitario && producto.cantidad && producto.categoria
     )
   ) {
     return res.status(400).json({
