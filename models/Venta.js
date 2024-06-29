@@ -17,6 +17,10 @@ const VentaSchema = mongoose.Schema({
     cantidad: {
       type: Number,
       required: true
+    },
+    categoria: {
+      type: String,
+      required: true
     }
   }
 ],
