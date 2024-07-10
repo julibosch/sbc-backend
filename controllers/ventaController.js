@@ -15,15 +15,14 @@ const listadoVentas = async (req, res) => {
 };
 
 const listadoVentasFinDeSemana = async (req, res) => {
-  const fechaDesde = sanitize(req.body.fechaDesde);
-  const fechaHasta = sanitize(req.body.fechaHasta);
+  const range = sanitize(req.body.rangeFormateado);
 
-  if (fechaDesde == "" || fechaHasta == "") {
+  if (!range || !range.from || !range.to) {
     return res.status(400).json({ message: "Fechas vacias, debe completarlas" })
   }
 
-  const fechaDesdeFormateada = `${fechaDesde}, 00:00:01`
-  const fechaHastaFormateada = `${fechaHasta}, 23:59:59`
+  const fechaDesdeFormateada = `${range.from}, 00:00:01`
+  const fechaHastaFormateada = `${range.to}, 23:59:59`
 
   try {
     const ventasAgrupadas = await Venta.aggregate([

@@ -15,7 +15,7 @@ dotenv.config();
 conectarDB();
 
 // Configuracion para Cors
-const dominiosPermitidos = [process.env.FRONTEND_URL, process.env.URL_VERCEL];
+const dominiosPermitidos = [process.env.FRONTEND_URL, process.env.URL_HOSTINGER];
 // const dominiosPermitidos = ["*"];
 const corsOptions = {
   origin: (origin, callback) => {
