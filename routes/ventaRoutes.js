@@ -4,7 +4,7 @@ import { listadoVentas, listadoVentasFinDeSemana, registrarVenta } from "../cont
 const router = express.Router();
 
 router.get("/admin/ventas", listadoVentas);
-router.post("/admin/ventasFinDeSemana", listadoVentasFinDeSemana);
+router.post("/admin/consultar-ventas-fechas", listadoVentasFinDeSemana);
 router.post("/admin/ventas", registrarVenta);
 
 export default router;
