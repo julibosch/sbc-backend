@@ -15,17 +15,18 @@ dotenv.config();
 conectarDB();
 
 // Configuracion para Cors
-const dominiosPermitidos = [process.env.FRONTEND_URL,process.env.URL_VERCEL];
+const dominiosPermitidos = [process.env.FRONTEND_URL, process.env.URL_VERCEL];
 // const dominiosPermitidos = ["*"];
 const corsOptions = {
-  origin: (origin,callback) => {
+  origin: (origin, callback) => {
     if (dominiosPermitidos.indexOf(origin) !== -1) {
-      callback(null,true)
-    }else{
-      callback(new Error("No permitido por cors"))
+      callback(null, true);
+    } else {
+      callback(new Error("No permitido por cors"));
     }
-  }
-}
+  },
+};
+
 app.use(cors(corsOptions));
 
 app.use("/", socioRoutes);

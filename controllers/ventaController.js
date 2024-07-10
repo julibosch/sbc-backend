@@ -18,17 +18,18 @@ const listadoVentasFinDeSemana = async (req, res) => {
   const fechaDesde = sanitize(req.body.fechaDesde);
   const fechaHasta = sanitize(req.body.fechaHasta);
 
-  if (fechaDesde == "" || fechaHasta == "")
-    return res
-      .status(400)
-      .json({ message: "Fechas vacias, debe completarlas" });
+  if (fechaDesde == "" || fechaHasta == "") {
+    return res.status(400).json({ message: "Fechas vacias, debe completarlas" })
+  }
+
+  const fechaDesdeFormateada = `${fechaDesde}, 00:00:01`
+  const fechaHastaFormateada = `${fechaHasta}, 23:59:59`
 
   try {
-
     const ventasAgrupadas = await Venta.aggregate([
       {
         $match: {
-          fecha: { $gte: fechaDesde, $lte: fechaHasta },
+          fecha: { $gte: fechaDesdeFormateada, $lte: fechaHastaFormateada },
         },
       },
       {
