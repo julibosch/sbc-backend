@@ -18,17 +18,16 @@ const listadoVentasFinDeSemana = async (req, res) => {
   const range = sanitize(req.body.rangeFormateado);
 
   if (!range || !range.from || !range.to) {
-    return res.status(400).json({ message: "Fechas vacias, debe completarlas" })
+    return res
+      .status(400)
+      .json({ message: "Fechas vacías, debe completarlas" });
   }
-
-  const fechaDesdeFormateada = `${range.from}, 00:00:01`
-  const fechaHastaFormateada = `${range.to}, 23:59:59`
 
   try {
     const ventasAgrupadas = await Venta.aggregate([
       {
         $match: {
-          fecha: { $gte: fechaDesdeFormateada, $lte: fechaHastaFormateada },
+          fecha: { $gte: range.from, $lte: range.to },
         },
       },
       {
@@ -73,16 +72,19 @@ const listadoVentasFinDeSemana = async (req, res) => {
 
 const registrarVenta = async (req, res) => {
   const { productos, precioTotal } = req.body;
+
   let productosSanitizado = sanitize(productos);
   const precioSanitizado = sanitize(precioTotal);
 
   // Filtrar los productos para quitar la descripción
-  productosSanitizado = productos.map(({ _id, precioUnitario, cantidad, categoria }) => ({
-    productoID: _id,
-    precioUnitario,
-    cantidad,
-    categoria
-  }));
+  productosSanitizado = productos.map(
+    ({ _id, precioUnitario, cantidad, categoria }) => ({
+      productoID: _id,
+      precioUnitario,
+      cantidad,
+      categoria,
+    })
+  );
 
   // Validar que se proporcionen los campos requeridos
   if (
@@ -90,7 +92,10 @@ const registrarVenta = async (req, res) => {
     !productosSanitizado.length ||
     !productosSanitizado.every(
       (producto) =>
-        producto.productoID && producto.precioUnitario && producto.cantidad && producto.categoria
+        producto.productoID &&
+        producto.precioUnitario &&
+        producto.cantidad &&
+        producto.categoria
     )
   ) {
     return res.status(400).json({

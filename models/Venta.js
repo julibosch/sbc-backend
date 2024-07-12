@@ -1,40 +1,39 @@
 import mongoose from "mongoose";
-import { DateTime } from 'luxon';
+import { format } from 'date-fns';
 
 const VentaSchema = mongoose.Schema({
-  productos: 
-  [
+  productos: [
     {
-    productoID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Producto',
-      required: true
+      productoID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Producto",
+        required: true,
+      },
+      precioUnitario: {
+        type: Number,
+        required: true,
+      },
+      cantidad: {
+        type: Number,
+        required: true,
+      },
+      categoria: {
+        type: String,
+        required: true,
+      },
     },
-    precioUnitario: {
-      type: Number,
-      required: true
-    },
-    cantidad: {
-      type: Number,
-      required: true
-    },
-    categoria: {
-      type: String,
-      required: true
-    }
-  }
-],
+  ],
   precioTotal: {
     type: Number,
     required: true,
-    trim: true
+    trim: true,
   },
   fecha: {
     type: String,
-    default: () => new Date().toLocaleString('es-AR', { timeZone: 'America/Buenos_Aires' })
-  }
+    default: () => format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+  },
 });
 
-const Venta = mongoose.model('Venta', VentaSchema);
+const Venta = mongoose.model("Venta", VentaSchema);
 
 export default Venta;
